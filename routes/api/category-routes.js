@@ -47,8 +47,29 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', async (req, res) => {
   // update a category by its `id` value
+  try {
+    const updatedCategory = await Category.update(
+     { // in this case, only the category name will be updated
+       category_name: req.body.tag_name
+     },
+     {
+       // Gets the category based on the id given in the request parameters
+       where: {
+         id: req.params.id,
+       },
+     }
+   );
+     if(!updatedCategory) {
+       res.status(404).json({message: "No category found with this id!"});
+       return;
+     }
+       // the .update functionality doesn't return the Category object, so instead we are just returning a message which says that it went through successfully
+       res.status(200).json({message: "Update complete!"});
+    } catch(err) {
+     res.status(500).json(err);
+   }
 });
 
 router.delete('/:id', async (req, res) => {
@@ -64,7 +85,7 @@ router.delete('/:id', async (req, res) => {
         res.status(404).json({message: 'No category found with this id!'});
         return;
       }
-      res.status(200).json(category);
+      res.status(200).json({message:"Category deleted!"});
 
     } catch (err) {
     res.status(500).json(err);

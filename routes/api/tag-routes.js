@@ -67,8 +67,8 @@ router.put('/:id', async (req, res) => {
       res.status(404).json({message: "No tag found with this id!"});
       return;
     }
-      // Sends the updated tag as a json response
-      res.status(200).json(updatedTag);
+      // the .update functionality doesn't return the Tag object, so instead we are just returning a message which says that it went through successfully
+      res.status(200).json({message: "Update complete!"});
    } catch(err) {
     res.status(500).json(err);
   }
@@ -89,10 +89,11 @@ router.delete('/:id', async (req, res) => {
         res.status(404).json({message: 'No tag found with this id!'});
         return;
       }
-      res.status(200).json(tagData);
+      res.status(200).json({message: "Tag deleted!"});
 
     } catch (err) {
     res.status(500).json(err);
+    
   }
 });
 
